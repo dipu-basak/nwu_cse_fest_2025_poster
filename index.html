@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Cybersecurity for E-Commerce</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js for the Pie Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Load Chart.js Datalabels Plugin for Percentages -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        /* Load Futuristic and Formal Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Open+Sans:wght@400;600&display=swap');
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-sans { font-family: 'Open Sans', sans-serif; }
+
+        /* Clean Accent Color Definition (Primary Blue) */
+        .accent-text {
+            color: #2563EB; /* blue-600 */
+        }
+        .accent-border {
+            border-color: #2563EB; /* blue-600 */
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Glitch Effect (Kept but modified to use accent color) */
+        .glitch-server::before, .glitch-server::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .glitch-server {
+            position: relative;
+            animation: glitch 2s linear infinite alternate;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); }
+            60% { transform: translate(3px, 3px); }
+            80% { transform: translate(3px, -3px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Styling for the horizontal flow step boxes */
+        .flow-step {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            min-height: 56px;
+            flex-basis: 0; /* Ensures even distribution in flex container */
+            margin: 0 4px; /* Small gap between steps */
+        }
+        .arrow-separator {
+            font-size: 1.5rem;
+            color: #4B5563; /* gray-600 */
+            flex-shrink: 0;
+            margin: 0 2px;
+        }
+
+        /* Color classes for flow steps */
+        .step-start { background-color: #3B82F6; color: white; } /* Blue */
+        .step-detect { background-color: #1F2937; color: white; } /* Dark Gray */
+        .step-block { background-color: #DC2626; color: white; } /* Red */
+        .step-flag { background-color: #FBBF24; color: #1F2937; } /* Amber/Yellow */
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-700 antialiased p-4 sm:p-8">
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto bg-white shadow-2xl rounded-xl p-6 sm:p-12 border border-gray-100">
+
+        <!-- Top Section (Header) -->
+        <header class="text-center mb-16">
+            <h1 class="font-orbitron text-5xl sm:text-7xl font-extrabold text-gray-900 mb-4">
+                AI-Powered <span class="accent-text">Cybersecurity</span> for E-Commerce
+            </h1>
+            <p class="text-xl sm:text-2xl font-semibold text-red-600 tracking-wider">
+                Smarter than firewalls. Faster than hackers. 🚨
+            </p>
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="grid md:grid-cols-2 gap-12 mb-16">
+
+            <!-- Left Column (The Problem) -->
+            <div class="bg-gray-100 p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-5 border-b-4 border-red-500 pb-3 text-gray-800">The Problem: E-Commerce Vulnerabilities</h2>
+                <p class="text-xl mb-6">
+                    Every e-commerce platform is a constant target for sophisticated attackers. Traditional, reactive security measures like manual penetration testing and bug bounties are too slow and cannot effectively stop <b>logical attacks</b> in real-time.
+                </p>
+                <ul class="space-y-4 text-xl">
+                    <!-- Original Problems -->
+                    <li class="flex items-start">
+                        <span class="text-red-500 text-2xl mr-3 mt-0.5">🔓</span>
+                        <p><strong>Broken Access Control (BAC):</strong> Unauthorized privilege escalation, allowing standard users to gain admin-level access.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-red-500 text-2xl mr-3 mt-0.5">⚡</span>
+                        <p><strong>Race Conditions:</strong> Exploiting concurrent requests for financial gain (e.g., unlimited coupon stacking or inventory manipulation).</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-red-500 text-2xl mr-3 mt-0.5">💳</span>
+                        <p><strong>E-commerce Fraud:</strong> Payment fraud, account takeover (ATO), and subsequent operational chargebacks.</p>
+                    </li>
+                    <!-- Added Problems -->
+                    <li class="flex items-start">
+                        <span class="text-red-500 text-2xl mr-3 mt-0.5">💔</span>
+                        <p><strong>Massive Data Breaches:</strong> Exfiltration of sensitive customer PII (Personally Identifiable Information) and payment data.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-red-500 text-2xl mr-3 mt-0.5">❌</span>
+                        <p><strong>Loss of Platforms:</strong> Critical downtime and revenue loss due to targeted denial-of-service (DDoS) attacks.</p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right Column (Our Solution & Pie Chart) -->
+            <div class="bg-gray-100 p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-5 border-b-4 border-blue-600 pb-3 text-gray-800">Our Solution: Real-Time AI Defense</h2>
+
+                <p class="text-xl mb-6">
+                    We propose an innovative <b>AI-Integrated Man-in-the-Middle (MITM) Proxy</b>. Unlike traditional Web Application Firewalls (WAFs), our system understands <b>business logic</b> and monitors traffic for subtle, logical, and volumetric anomalies before they reach the main server.
+                </p>
+
+                <div class="flex justify-around items-center mb-8">
+                    <div class="text-center">
+                        <span class="text-4xl accent-text">🚫</span>
+                        <p class="text-lg font-bold">Block Fraud</p>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-4xl accent-text">⚡</span>
+                        <p class="text-lg font-bold">Real-time Detection</p>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-4xl accent-text">🔒</span>
+                        <p class="text-lg font-bold">Protect Trust</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold mb-3 mt-6 text-gray-800">Cyber Attack Breakdown (Estimated Impact)</h3>
+                <div class="h-72 w-full flex justify-center items-center">
+                    <canvas id="attackPieChart" class="max-h-72"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center (Infographic Flow) -->
+        <div class="mb-16 p-8 bg-white rounded-xl border border-gray-200 shadow-xl">
+            <h2 class="text-4xl font-bold text-center mb-10 text-gray-900">The AI Monitoring Workflow</h2>
+
+            <!-- Main Horizontal Flow Diagram (Request -> MITM -> Server) -->
+            <div class="flex items-center justify-between text-center relative mb-16 flex-wrap">
+                <!-- User Request -->
+                <div class="flex-1 min-w-[120px] p-2">
+                    <div class="p-4 bg-blue-100 border-2 border-blue-500 rounded-xl shadow-xl">
+                        <span class="text-3xl">👤</span>
+                        <p class="mt-2 font-bold text-lg">User Request</p>
+                    </div>
+                </div>
+
+                <!-- Arrow 1 -->
+                <div class="w-10 md:w-24 lg:w-36 flex-shrink-0 relative">
+                    <div class="h-1 bg-gray-400"></div>
+                    <span class="absolute top-1/2 right-0 transform -translate-y-1/2 w-0 h-0 border-t-6 border-b-6 border-l-10 border-l-gray-400 border-transparent"></span>
+                    <p class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-md font-mono text-black-600">Encrypted Traffic</p>
+                </div>
+
+                <!-- AI MITM Agent -->
+                <div class="flex-1 min-w-[180px] p-2">
+                    <div class="p-5 bg-tomato-900 border-4 accent-border rounded-xl shadow-2xl">
+                        <span class="text-3xl accent-text">🤖</span>
+                        <p class="mt-2 font-extrabold text-xl accent-text">AI MITM Agent</p>
+                    </div>
+                </div>
+
+                <!-- Arrow 2 (Decision Split) -->
+                <div class="w-10 md:w-24 lg:w-36 flex-shrink-0 relative">
+                    <div class="h-1 bg-gray-400"></div>
+                    <span class="absolute top-1/2 right-0 transform -translate-y-1/2 w-0 h-0 border-t-6 border-b-6 border-l-10 border-l-gray-400 border-transparent"></span>
+                    <p class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-md font-mono text-gray-600">Analysis & Decision</p>
+                </div>
+
+                <!-- Server (Destination) -->
+                <div class="flex-1 min-w-[120px] p-2">
+                    <div class="p-4 bg-indigo-100 border-2 border-indigo-500 rounded-xl shadow-xl glitch-server" data-text="🖥">
+                        <span class="text-3xl">🖥</span>
+                        <p class="mt-2 font-bold text-lg">Server</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Specific Workflow Examples (Enhanced Horizontal Flow) -->
+            <div class="grid md:grid-cols-2 gap-8 text-center">
+
+                <!-- 1. Volumetric Fraud Detection (Race Condition) -->
+                <div class="p-4 border border-gray-300 rounded-xl bg-white shadow-lg">
+                    <h3 class="font-bold text-xl mb-4 text-gray-700">1. Volumetric Fraud (Race Condition)</h3>
+                    <div class="flow-chart flex items-center justify-between w-full text-sm">
+                        <div class="flow-step step-start">Request (50x/1s)</div>
+                        <span class="arrow-separator">&rarr;</span>
+                        <div class="flow-step step-detect">Detects Volumetric Anomaly</div>
+                        <span class="arrow-separator">&rarr;</span>
+                        <div class="flow-step step-block">Decision: Block & Alert</div>
+                    </div>
+                    <p class="mt-4 text-xs text-gray-500">
+                        Prevents financial loss by identifying and stopping machine-speed coupon or inventory exploitation instantly.
+                    </p>
+                </div>
+
+                <!-- 2. Privilege Escalation (BAC Detection) -->
+                <div class="p-4 border border-gray-300 rounded-xl bg-white shadow-lg">
+                    <h3 class="font-bold text-xl mb-4 text-gray-700">2. Privilege Escalation (BAC Detection)</h3>
+                    <div class="flow-chart flex items-center justify-between w-full text-sm">
+                        <div class="flow-step step-start">Request (/admin/data)</div>
+                        <span class="arrow-separator">&rarr;</span>
+                        <div class="flow-step step-detect">Detects Role Mismatch</div>
+                        <span class="arrow-separator">&rarr;</span>
+                        <div class="flow-step step-flag">Decision: Flag & Notify Security</div>
+                    </div>
+                    <p class="mt-4 text-xs text-gray-500">
+                        Trained on normal role functionality, the AI identifies lateral movement attempts to bypass WAFs.
+                    </p>
+                </div>
+                
+                <!-- 3. Behavioral Fraud Detection (Account Takeover) -->
+                <div class="p-4 border border-gray-300 rounded-xl bg-white shadow-lg">
+                    <h3 class="font-bold text-xl mb-4 text-gray-700">3. Behavioral Fraud (ATO)</h3>
+                    <div class="flow-chart flex items-center justify-between w-full text-sm">
+                        <div class="flow-step step-start">Login (New Device/Geo)</div>
+                        <span class="arrow-separator">&rarr;</span>
+                        <div class="flow-step step-detect">Detects Behavioral Anomaly</div>
+                        <span class="arrow-separator">&rarr;</span>
+                        <div class="flow-step step-flag">Decision: Trigger 2FA Challenge</div>
+                    </div>
+                    <p class="mt-4 text-xs text-gray-500">
+                        Stops Account Takeover attempts by challenging suspicious logins based on learned user behavior profiles.
+                    </p>
+                </div>
+
+                <!-- 4. Counterfeit/Fake Product Detection -->
+                <div class="p-4 border border-gray-300 rounded-xl bg-white shadow-lg">
+                    <h3 class="font-bold text-xl mb-4 text-gray-700">4. Counterfeit Product Detection</h3>
+                    <div class="flow-chart flex items-center justify-between w-full text-sm">
+                        <div class="flow-step step-start">New Listing API Call</div>
+                        <span class="arrow-separator">&rarr;</span>
+                        <div class="flow-step step-detect">Detects Content Anomaly (SKU/Keyword)</div>
+                        <span class="arrow-separator">&rarr;</span>
+                        <div class="flow-step step-block">Decision: Quarantine/Manual Review</div>
+                    </div>
+                    <p class="mt-4 text-xs text-gray-500">
+                        Maintains marketplace integrity by instantly flagging and blocking listings attempting to inject fake or counterfeit goods.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="h-1 bg-gray-300 relative my-12"></div>
+
+
+        <!-- Bottom Section -->
+        <footer class="grid md:grid-cols-3 gap-8 items-center text-center md:text-left">
+
+            <!-- Taglines -->
+            <div class="md:col-span-1">
+                <p class="text-3xl font-bold text-gray-900">
+                    <span class="accent-text">Hackers Race,</span> AI Wins
+                </p>
+                <p class="text-xl text-gray-600 mt-1">
+                    AI: Your Firewall’s Smarter Cousin
+                </p>
+            </div>
+
+            <!-- Future Vision -->
+            <div class="md:col-span-1 text-center">
+                <p class="text-base font-semibold text-gray-500 uppercase tracking-widest">Roadmap</p>
+                <p class="text-2xl font-bold accent-text">
+                    Next step: AI that self-heals vulnerabilities.
+                </p>
+            </div>
+
+
+            <!-- QR Code Placeholder (Simulated) -->
+            <div class="md:col-span-1 flex flex-col md:flex-row justify-center md:justify-end items-center space-y-3 md:space-y-0 md:space-x-4">
+                <div class="p-2 bg-gray-200 rounded-lg shadow-md border-2 accent-border">
+                    <img src="https://placehold.co/120x120/1f2937/ffffff?text=SCAN" alt="QR Code Link to Demo" class="w-24 h-24">
+                </div>
+                <p class="text-lg font-semibold text-gray-600">Scan for Live Demo</p>
+            </div>
+
+        </footer>
+
+    </div>
+
+    <script>
+        // Use a formal sans-serif font for the body (Open Sans) and a futuristic font for the title (Orbitron)
+        document.body.className += ' font-sans';
+
+        // --- Chart.js Pie Chart Configuration ---
+        const setupChart = () => {
+            // Register the Datalabels plugin globally
+            Chart.register(ChartDataLabels);
+
+            const ctx = document.getElementById('attackPieChart').getContext('2d');
+
+            const chartData = {
+                labels: ['E-Commerce Fraud', 'Broken Access Control (BAC)', 'Data Breaches / PII Loss', 'Logic Exploits', 'Loss of Platforms'],
+                datasets: [{
+                    // Data values represent percentages
+                    data: [35, 25, 20, 10, 10], 
+                    backgroundColor: [
+                        '#DC2626', // Red for Fraud
+                        '#FCD34D', // Yellow for BAC
+                        '#1D4ED8', // Dark Blue for Data Breaches
+                        '#10B981', // Green for Logic Exploits
+                        '#9CA3AF', // Gray for Loss of Platforms
+                    ],
+                    hoverOffset: 15
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    family: 'Open Sans',
+                                    size: 14,
+                                }
+                            }
+                        },
+                        // Configuration for the Datalabels plugin
+                        datalabels: {
+                            formatter: (value, context) => {
+                                // Display the percentage value
+                                return value + '%';
+                            },
+                            color: '#fff', // White labels for contrast
+                            font: {
+                                weight: 'bold',
+                                size: 16
+                            },
+                            // Position the label slightly outside or centered
+                            anchor: 'end',
+                            align: 'start',
+                            offset: 8
+                        }
+                    }
+                }
+            });
+        };
+
+        // Initialize the chart once the document is fully loaded
+        window.onload = setupChart;
+    </script>
+</body>
+</html>
