@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEMO Anomaly Detection System</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles for Cyberpunk Theme -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Share+Tech+Mono&display=swap');
+        
+        :root {
+            --neon-green: #39ff14;
+            --neon-red: #ff3333;
+            --dark-bg: #0d1117;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--dark-bg);
+            color: var(--neon-green);
+        }
+
+        /* Neon Glow Effect */
+        .neon-border {
+            box-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green);
+            border-color: var(--neon-green);
+        }
+        .error-neon {
+            text-shadow: 0 0 5px var(--neon-red), 0 0 10px rgba(255, 51, 51, 0.5);
+            color: var(--neon-red);
+        }
+        /* New: Blue/Indigo Neon for the team button */
+        .blue-neon-border {
+            box-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1; /* Indigo-500 */
+            border-color: #6366f1;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 5px var(--neon-green), 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+        
+
+        /* Scanner Animation */
+        #scanner {
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+            background: rgba(57, 255, 20, 0.05);
+            border-radius: 0.5rem;
+        }
+        #scanner:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+            animation: scan-line 3s infinite linear;
+            box-shadow: 0 0 10px var(--neon-green);
+            opacity: 0.7;
+        }
+        @keyframes scan-line {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(calc(100% - 5px)); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Glitch Effect (for the final alert) */
+        .glitch-text {
+            font-family: 'Major Mono Display', monospace;
+            font-size: 2rem;
+            position: relative;
+            animation: glitch-anim 0.5s infinite alternate steps(1);
+        }
+        .glitch-text:before, .glitch-text:after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .glitch-text:before {
+            left: 2px;
+            text-shadow: -2px 0 var(--neon-red);
+            clip: rect(24px, 350px, 40px, 0);
+        }
+        .glitch-text:after {
+            left: -2px;
+            text-shadow: -2px 0 var(--neon-green);
+            clip: rect(8px, 350px, 24px, 0);
+        }
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10 min-h-screen">
+
+    <div class="max-w-5xl mx-auto">
+        
+        <!-- Title and Introduction -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold neon-text mb-2">MITM AI DEFENSE SYSTEM</h1>
+            <p class="text-sm text-gray-400">Simulate Attack Prevention on E-Commerce Platforms. <br>
+            Try Race-Condition or Broken Access Control Tests!
+            </p>
+            <br><br>
+            <p class="text-sm text-gray-400">STATUS: ACTIVE // MONITORING LIVE TRAFFIC</p>
+        </header>
+
+        <!-- Control Panel - Focused on the two attack buttons (2-column grid for desktop) -->
+        <div id="controls" class="grid grid-cols-1 md:grid-cols-2 justify-center gap-6 mb-10">
+            
+            <button id="volumetricBtn" 
+                    class="bg-gray-800 text-white font-bold py-4 px-6 rounded-lg border-2 border-green-500 neon-border hover:bg-green-800 transition duration-300 shadow-lg text-lg tracking-wider"
+                    data-scenario="volumetric">
+                SEND 50 CONCURRENT REQUESTS (Volumetric Test)
+            </button>
+
+            <button id="accessBtn" 
+                    class="bg-gray-800 text-white font-bold py-4 px-6 rounded-lg border-2 border-red-500 neon-border hover:bg-red-800 transition duration-300 shadow-lg text-lg tracking-wider"
+                    data-scenario="access">
+                ATTEMPT ADMIN ACCESS (BAC Test)
+            </button>
+            
+        </div>
+
+        <!-- Main Console Output -->
+        <div id="scanner" class="h-64 md:h-96 p-4 border-2 rounded-lg neon-border transition duration-500">
+            <h2 class="text-xl font-bold mb-2 neon-text">SYSTEM CONSOLE // TRAFFIC LOG</h2>
+            <div id="log-output" class="text-sm overflow-y-auto h-[calc(100%-3rem)] transition-colors">
+                <p class="text-gray-500">// Waiting for user input. Click a button to simulate an attack vector...</p>
+            </div>
+        </div>
+        
+        <!-- NEW LOCATION: Meet the Team Button (Below Console) -->
+        <div class="flex justify-center mt-6">
+            <a href="meet.html" 
+               class="w-full md:w-1/2 flex items-center justify-center bg-gray-800 text-white font-bold py-4 px-6 rounded-lg border-2 border-indigo-500 blue-neon-border hover:bg-indigo-800 transition duration-300 shadow-lg text-lg tracking-wider"
+               >
+                MEET THE TEAM
+            </a>
+        </div>
+    </div>
+
+    <!-- Alert Modal (Hidden by default) -->
+    <div id="alert-modal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50 transition-opacity duration-300">
+        <div class="bg-gray-900 border-4 border-red-500 p-8 rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-500 scale-95" id="modal-content">
+            <div class="text-center error-neon">
+                <!-- Glitch effect text -->
+                <h3 class="glitch-text text-4xl mb-4" data-text="ALERT: ANOMALY DETECTED">ALERT: ANOMALY DETECTED</h3>
+                <h4 id="alert-title" class="text-2xl font-bold mb-4"></h4>
+                <p id="alert-message" class="text-gray-300 mb-6 font-mono text-sm leading-relaxed"></p>
+            </div>
+            <button id="close-modal-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition duration-200 neon-border" style="border-color: var(--neon-red);">
+                SYSTEM ACKNOWLEDGEMENT (CLOSE)
+            </button>
+        </div>
+    </div>
+
+   
+
+    <script>
+        // --- DOM Elements ---
+        const volumetricBtn = document.getElementById('volumetricBtn');
+        const accessBtn = document.getElementById('accessBtn');
+        const logOutput = document.getElementById('log-output');
+        const scannerDiv = document.getElementById('scanner');
+        const alertModal = document.getElementById('alert-modal');
+        const alertTitle = document.getElementById('alert-title');
+        const alertMessage = document.getElementById('alert-message');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const controls = document.getElementById('controls');
+
+        // --- Configuration ---
+        const scenarios = {
+            volumetric: {
+                title: 'Volumetric Error (Race Condition)',
+                log: [
+                    '// INITIATING: 50x Request Sequence (Simulated)',
+                    '// MITM PROXY: Request volume spike detected.',
+                    '// AI MODEL: Analyzing packet velocity and user history...',
+                    '// THRESHOLD: Volume exceeds T+3 sigma standard deviation.',
+                    '// CONCLUSION: VOLUMETRIC ANOMALY. Request Blocked.'
+                ],
+                resultTitle: 'VOLUMETRIC ERROR. Request Blocked.',
+                resultMsg: 'System blocked 50 simultaneous identical requests from the same source. Flagged as suspected Race Condition attempt.'
+            },
+            access: {
+                title: 'Broken Access Control (BAC)',
+                log: [
+                    '// INITIATING: Unauthorized URL Access Attempt (Admin Panel)',
+                    '// MITM PROXY: Non-admin user session token detected.',
+                    '// AI MODEL: Validating user role against requested resource ACL...',
+                    '// ACL CHECK: Role [User] does not match required [Admin].',
+                    '// CONCLUSION: ACCESS CONTROL VIOLATION. Request Blocked.'
+                ],
+                resultTitle: 'ACCESS DENIED. Permissions Violation.',
+                resultMsg: 'Unauthorized role attempted to access restricted admin functionality. Flagged as Broken Access Control vulnerability exploitation.'
+            }
+        };
+
+        // --- State Management ---
+        let isScanning = false;
+
+        /**
+         * Logs a message to the console with a typewriter effect.
+         * @param {string} message - The message to display.
+         * @param {number} delay - Delay before showing the message.
+         * @returns {Promise<void>} A promise that resolves when the message is fully displayed.
+         */
+        function logMessage(message, delay) {
+            // Typing Speed is now 10ms (was 20ms)
+            const TYPING_SPEED = 10; 
+            
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const line = document.createElement('p');
+                    line.textContent = '';
+                    logOutput.appendChild(line);
+                    logOutput.scrollTop = logOutput.scrollHeight;
+
+                    let i = 0;
+                    const interval = setInterval(() => {
+                        if (i < message.length) {
+                            line.textContent += message.charAt(i);
+                            i++;
+                            logOutput.scrollTop = logOutput.scrollHeight;
+                        } else {
+                            clearInterval(interval);
+                            resolve();
+                        }
+                    }, TYPING_SPEED); 
+                }, delay);
+            });
+        }
+
+        /**
+         * Clears the log and resets the scanner visuals.
+         */
+        function resetLog() {
+            logOutput.innerHTML = '';
+            scannerDiv.classList.remove('error-neon');
+            scannerDiv.classList.add('neon-border');
+            scannerDiv.style.animation = 'none'; // Stop glitch if applied
+        }
+
+        /**
+         * Shows the final result modal.
+         * @param {string} title - The alert title.
+         * @param {string} message - The alert message.
+         */
+        function showResultModal(title, message) {
+            alertTitle.textContent = title;
+            alertMessage.textContent = message;
+            alertModal.classList.remove('hidden');
+            alertModal.classList.add('opacity-100');
+            // Apply error styling to the scanner
+            scannerDiv.classList.remove('neon-border');
+            scannerDiv.classList.add('error-neon');
+        }
+
+        /**
+         * Main function to start the simulated security scan.
+         * @param {string} scenarioKey - The key for the scenario (e.g., 'volumetric').
+         */
+        async function startScan(scenarioKey) {
+            if (isScanning) return;
+            isScanning = true;
+            
+            const scenario = scenarios[scenarioKey];
+            
+            // Disable only the functional buttons
+            volumetricBtn.disabled = true;
+            accessBtn.disabled = true;
+            
+            resetLog();
+            logMessage('// CONNECTION ESTABLISHED...', 0);
+            
+            // Process logs sequentially with delays (all original delays halved)
+            let delay = 500; 
+            for (const msg of scenario.log) {
+                await logMessage(msg, delay);
+                delay = 400; 
+            }
+
+            // Final step: Anomaly Detected
+            await logMessage('// ANOMALY DETECTED. DISPLAYING ALERT...', 750); 
+            
+            showResultModal(scenario.resultTitle, scenario.resultMsg);
+            
+            isScanning = false;
+            
+            // Re-enable controls
+            volumetricBtn.disabled = false;
+            accessBtn.disabled = false;
+        }
+
+        // --- Event Listeners ---
+        volumetricBtn.addEventListener('click', () => startScan('volumetric'));
+        accessBtn.addEventListener('click', () => startScan('access'));
+        
+        closeModalBtn.addEventListener('click', () => {
+            alertModal.classList.add('hidden');
+            alertModal.classList.remove('opacity-100');
+            resetLog();
+            // Reset log message delay is halved
+            logMessage('// SYSTEM RESET. AWAITING NEXT INPUT...', 250); 
+        });
+
+        // Initial setup log (all delays halved)
+        window.onload = () => {
+             logMessage('// SYSTEM ONLINE. ALL MODULES NOMINAL.', 250); 
+             logMessage('// AI THREAT ANALYTICS v1.4.2 INITIALIZED.', 500); 
+             logMessage('// WAITING FOR REQUEST SIMULATION...', 750); 
+        };
+    </script>
+</body>
+</html>
