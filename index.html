@@ -154,97 +154,98 @@
         border-radius: 0.75rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
       }
+    </style>
+    <!-- Demo styles imported from demo.html -->
+    <style>
       @import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Share+Tech+Mono&display=swap');
-        
-        :root {
-            --neon-green: #39ff14;
-            --neon-red: #ff3333;
-            --dark-bg: #0d1117;
-        }
 
-        body {
-            font-family: 'Share Tech Mono', monospace;
-            background-color: var(--dark-bg);
-            color: var(--neon-green);
-        }
+      :root {
+        --neon-green: #39ff14;
+        --neon-red: #ff3333;
+        --dark-bg: #0d1117;
+      }
 
-        /* Neon Glow Effect */
-        .neon-border {
-            box-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green);
-            border-color: var(--neon-green);
-        }
-        .error-neon {
-            text-shadow: 0 0 5px var(--neon-red), 0 0 10px rgba(255, 51, 51, 0.5);
-            color: var(--neon-red);
-        }
-        /* New: Blue/Indigo Neon for the team button */
-        .blue-neon-border {
-            box-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1; /* Indigo-500 */
-            border-color: #6366f1;
-        }
+      body {
+        /* keep existing font but also include the demo monospace for console-like text */
+        font-family: 'Share Tech Mono', monospace;
+      }
 
-        .neon-text {
-            text-shadow: 0 0 5px var(--neon-green), 0 0 10px rgba(57, 255, 20, 0.5);
-        }
-        
+      /* Neon Glow Effect from demo.html */
+      .neon-border {
+        box-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green);
+        border-color: var(--neon-green);
+      }
+      .error-neon {
+        text-shadow: 0 0 5px var(--neon-red), 0 0 10px rgba(255, 51, 51, 0.5);
+        color: var(--neon-red);
+      }
+      /* Blue/Indigo Neon for the team button */
+      .blue-neon-border {
+        box-shadow: 0 0 5px #6366f1, 0 0 10px #6366f1; /* Indigo-500 */
+        border-color: #6366f1;
+      }
 
-        /* Scanner Animation */
-        #scanner {
-            position: relative;
-            height: 100%;
-            overflow: hidden;
-            background: rgba(57, 255, 20, 0.05);
-            border-radius: 0.5rem;
-        }
-        #scanner:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
-            animation: scan-line 3s infinite linear;
-            box-shadow: 0 0 10px var(--neon-green);
-            opacity: 0.7;
-        }
-        @keyframes scan-line {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(calc(100% - 5px)); }
-            100% { transform: translateY(0); }
-        }
+      .neon-text {
+        text-shadow: 0 0 5px var(--neon-green), 0 0 10px rgba(57, 255, 20, 0.5);
+      }
 
-        /* Glitch Effect (for the final alert) */
-        .glitch-text {
-            font-family: 'Major Mono Display', monospace;
-            font-size: 2rem;
-            position: relative;
-            animation: glitch-anim 0.5s infinite alternate steps(1);
-        }
-        .glitch-text:before, .glitch-text:after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .glitch-text:before {
-            left: 2px;
-            text-shadow: -2px 0 var(--neon-red);
-            clip: rect(24px, 350px, 40px, 0);
-        }
-        .glitch-text:after {
-            left: -2px;
-            text-shadow: -2px 0 var(--neon-green);
-            clip: rect(8px, 350px, 24px, 0);
-        }
-        @keyframes glitch-anim {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
+      /* Scanner Animation */
+      #scanner {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+        background: rgba(57, 255, 20, 0.03); /* slightly subtler overlay to match poster */
+        border-radius: 0.5rem;
+      }
+      #scanner:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+        animation: scan-line 3s infinite linear;
+        box-shadow: 0 0 10px var(--neon-green);
+        opacity: 0.6;
+      }
+      @keyframes scan-line {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(calc(100% - 5px)); }
+        100% { transform: translateY(0); }
+      }
+
+      /* Glitch Effect (for the final alert) */
+      .glitch-text {
+        font-family: 'Major Mono Display', monospace;
+        font-size: 2rem;
+        position: relative;
+        animation: glitch-anim 0.5s infinite alternate steps(1);
+      }
+      .glitch-text:before, .glitch-text:after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .glitch-text:before {
+        left: 2px;
+        text-shadow: -2px 0 var(--neon-red);
+        clip: rect(24px, 350px, 40px, 0);
+      }
+      .glitch-text:after {
+        left: -2px;
+        text-shadow: -2px 0 var(--neon-green);
+        clip: rect(8px, 350px, 24px, 0);
+      }
+      @keyframes glitch-anim {
+        0% { transform: translate(0); }
+        20% { transform: translate(-2px, 2px); }
+        40% { transform: translate(-2px, -2px); }
+        60% { transform: translate(2px, 2px); }
+        80% { transform: translate(2px, -2px); }
+        100% { transform: translate(0); }
+      }
     </style>
   </head>
   <!-- Light greenish background for the body -->
@@ -751,19 +752,26 @@
       
     </div>
 
-    <!-- demosection -->
-     <!-- btn -->
-      <div class="justify-center text-center pt-20 mt-10">
+    <!-- starting here demo.html code -->
+    <div>
+        <!-- btn -->
+      <!-- <div class="justify-center text-center ">
         <a href="https://github.com/dipu-basak/nwu_cse_fest_2025_poster/blob/main/demo.html">
         <button id="accessBtn" 
                     class="bg-gray-800 text-white font-bold py-4 px-6 rounded-lg border-2 border-red-500 neon-border hover:bg-red-800 transition duration-300 shadow-lg text-lg tracking-wider"
                     data-scenario="access">
                 Interactive Demo
             </button></a>
-      </div>
+      </div> -->
 
       <!-- btn -->
-<div class="p-4 md:p-10 min-h-screen">
+
+      <h2 class="text-3xl font-bold text-center mt-20 mb-6 ">
+        
+        Interactive Demo Section: Simulate Attacks and See AI Defense in Action
+      </h2>
+      <hr>
+       <div class="p-4 md:p-10 min-h-screen">
 
     <div class="max-w-5xl mx-auto">
         
@@ -803,13 +811,13 @@
         </div>
         
         <!-- NEW LOCATION: Meet the Team Button (Below Console) -->
-        <div class="flex justify-center mt-6">
+        <!-- <div class="flex justify-center mt-6">
             <a href="meet.html" 
                class="w-full md:w-1/2 flex items-center justify-center bg-gray-800 text-white font-bold py-4 px-6 rounded-lg border-2 border-indigo-500 blue-neon-border hover:bg-indigo-800 transition duration-300 shadow-lg text-lg tracking-wider"
                >
                 MEET THE TEAM
             </a>
-        </div>
+        </div> -->
     </div>
 
     <!-- Alert Modal (Hidden by default) -->
@@ -825,89 +833,22 @@
                 SYSTEM ACKNOWLEDGEMENT (CLOSE)
             </button>
         </div>
+    </div></div>
+
     </div>
 
-   
-
+    <!-- emding here demo.html code -->
     
-</div>
-    <!-- demosetion -->
     
 
     <script>
       // --- Chart.js Pie Chart Configuration ---
-      const setupChart = () => {
-        // Register the Datalabels plugin globally
-        Chart.register(ChartDataLabels);
-
-        const ctx = document.getElementById("attackPieChart").getContext("2d");
-
-        const chartData = {
-          labels: [
-            "E-Commerce Fraud",
-            "Broken Access Control (BAC)",
-            "Data Breaches / PII Loss",
-            "Logic Exploits",
-            "Loss of Platforms",
-          ],
-          datasets: [
-            {
-              // Data values represent percentages
-              data: [35, 25, 20, 10, 10],
-              backgroundColor: [
-                "#DC2626", // Red for Fraud
-                "#FCD34D", // Yellow for BAC
-                "#059669", // Green-600 (New Accent) for Data Breaches
-                "#FF6347", // Tomato Red for Logic Exploits (Using the new primary color here)
-                "#9CA3AF", // Gray for Loss of Platforms
-              ],
-              hoverOffset: 10,
-            },
-          ],
-        };
-
-        new Chart(ctx, {
-          type: "pie",
-          data: chartData,
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: {
-                  font: {
-                    family: "Open Sans",
-                    size: 11,
-                  },
-                },
-              },
-              // Configuration for the Datalabels plugin
-              datalabels: {
-                formatter: (value, context) => {
-                  // Display the percentage value
-                  return value + "%";
-                },
-                color: "#fff",
-                font: {
-                  weight: "bold",
-                  size: 12,
-                },
-                anchor: "center",
-                align: "center",
-              },
-            },
-          },
-        });
-      };
-
-      // Initialize the chart once the document is fully loaded
-      window.onload = setupChart;
-    </script>
-    <script>
-        // --- DOM Elements ---
-        const volumetricBtn = document.getElementById('volumetricBtn');
-        const accessBtn = document.getElementById('accessBtn');
+      // adding from demo.html
+      // Select all scenario buttons by data-scenario attribute.
+      const scenarioButtons = document.querySelectorAll('[data-scenario]');
+      // Keep references for compatibility with existing code paths that expect single elements.
+      const volumetricBtn = document.getElementById('volumetricBtn');
+      const accessBtn = document.getElementById('accessBtn');
         const logOutput = document.getElementById('log-output');
         const scannerDiv = document.getElementById('scanner');
         const alertModal = document.getElementById('alert-modal');
@@ -953,9 +894,9 @@
          * @param {number} delay - Delay before showing the message.
          * @returns {Promise<void>} A promise that resolves when the message is fully displayed.
          */
-        function logMessage(message, delay) {
-            // Typing Speed is now 10ms (was 20ms)
-            const TYPING_SPEED = 10; 
+    function logMessage(message, delay) {
+      // Typing speed set to a balance between snappy and readable
+      const TYPING_SPEED = 7; 
             
             return new Promise(resolve => {
                 setTimeout(() => {
@@ -1021,15 +962,15 @@
             resetLog();
             logMessage('// CONNECTION ESTABLISHED...', 0);
             
-            // Process logs sequentially with delays (all original delays halved)
-            let delay = 500; 
-            for (const msg of scenario.log) {
-                await logMessage(msg, delay);
-                delay = 400; 
-            }
+      // Process logs sequentially with slightly increased delays for readability
+      let delay = 220; 
+      for (const msg of scenario.log) {
+        await logMessage(msg, delay);
+        delay = 180; 
+      }
 
-            // Final step: Anomaly Detected
-            await logMessage('// ANOMALY DETECTED. DISPLAYING ALERT...', 750); 
+      // Final step: Anomaly Detected
+      await logMessage('// ANOMALY DETECTED. DISPLAYING ALERT...', 350); 
             
             showResultModal(scenario.resultTitle, scenario.resultMsg);
             
@@ -1041,23 +982,41 @@
         }
 
         // --- Event Listeners ---
-        volumetricBtn.addEventListener('click', () => startScan('volumetric'));
-        accessBtn.addEventListener('click', () => startScan('access'));
+    // Attach listeners to every button with data-scenario to handle duplicate IDs
+    scenarioButtons.forEach(btn => {
+      // If the button is inside an anchor, prevent navigation so JS can run
+      btn.addEventListener('click', (e) => {
+        // If the element is an <a> or nested in one, prevent default navigation
+        if (e.target.tagName.toLowerCase() === 'a' || e.currentTarget.closest('a')) {
+          e.preventDefault();
+        }
+        const scenario = btn.getAttribute('data-scenario');
+        if (scenario) startScan(scenario);
+      });
+    });
+        
         
         closeModalBtn.addEventListener('click', () => {
             alertModal.classList.add('hidden');
             alertModal.classList.remove('opacity-100');
             resetLog();
-            // Reset log message delay is halved
-            logMessage('// SYSTEM RESET. AWAITING NEXT INPUT...', 250); 
+      // Reset log message
+      logMessage('// SYSTEM RESET. AWAITING NEXT INPUT...', 220); 
         });
 
-        // Initial setup log (all delays halved)
-        window.onload = () => {
-             logMessage('// SYSTEM ONLINE. ALL MODULES NOMINAL.', 250); 
-             logMessage('// AI THREAT ANALYTICS v1.4.2 INITIALIZED.', 500); 
-             logMessage('// WAITING FOR REQUEST SIMULATION...', 750); 
-        };
+     // Initial setup log (all delays halved)
+     window.addEventListener('load', () => {
+     logMessage('// SYSTEM ONLINE. ALL MODULES NOMINAL.', 180); 
+     logMessage('// AI THREAT ANALYTICS v1.4.2 INITIALIZED.', 300); 
+     logMessage('// WAITING FOR REQUEST SIMULATION...', 480); 
+     });
+      // ending here
+
+
+
+
+
+      
     </script>
   </body>
 </html>
