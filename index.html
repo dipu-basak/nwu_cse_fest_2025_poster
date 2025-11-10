@@ -119,6 +119,11 @@
         min-height: 90vh;
       }
 
+      /* Make poster less tall on small screens to avoid large vertical whitespace */
+      @media (max-width: 640px) {
+        .poster-container { min-height: auto; padding: 1.5rem; }
+      }
+
       /* General content box styling */
       .content-box {
         min-height: 200px;
@@ -165,8 +170,8 @@
         --dark-bg: #0d1117;
       }
 
-      body {
-        /* keep existing font but also include the demo monospace for console-like text */
+      /* Scope the demo monospace font to console and glitch only to avoid changing poster layout on mobile */
+      .console-mono, .glitch-text {
         font-family: 'Share Tech Mono', monospace;
       }
 
@@ -194,7 +199,9 @@
         position: relative;
         height: 100%;
         overflow: hidden;
-        background: rgba(57, 255, 20, 0.03); /* slightly subtler overlay to match poster */
+        /* Dark console background for better readability */
+        background-color: #041018; /* very dark teal/near-black */
+        color: #d7ffe6; /* light greenish text */
         border-radius: 0.5rem;
       }
       #scanner:before {
@@ -214,6 +221,20 @@
         50% { transform: translateY(calc(100% - 5px)); }
         100% { transform: translateY(0); }
       }
+
+      /* Log output inside console: ensure readable text and no extra background */
+      #log-output {
+        background: transparent;
+        color: #bff6c9; /* soft neon green for log text */
+      }
+      #log-output p {
+        margin: 0 0 0.4rem;
+        color: #bff6c9;
+        font-size: 0.95rem;
+        line-height: 1.35;
+      }
+      /* Ensure the console header remains visible */
+      #scanner h2 { color: #e6ffed; }
 
       /* Glitch Effect (for the final alert) */
       .glitch-text {
@@ -246,6 +267,45 @@
         80% { transform: translate(2px, -2px); }
         100% { transform: translate(0); }
       }
+
+      /* Meet section enter/exit animation and accessibility helpers */
+      #meet-team { display: block; }
+      .meet-panel {
+        transform: translateY(12px) scale(.98);
+        opacity: 0;
+        transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease;
+      }
+      #meet-team.open .meet-panel {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      /* visually-hide (keeps element accessible when needed) */
+      .visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+      /* Meet section glass / backdrop styles */
+      /* Slight translucent panel to create a 'glass' look on top of the page */
+      #meet-team { background: transparent; }
+      .meet-panel { 
+        backdrop-filter: blur(8px) saturate(120%);
+        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 1rem;
+        border-radius: 0.75rem;
+      }
+
+      /* Meet card: larger, bolder typography and glass effect */
+      .meet-card {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.06);
+        backdrop-filter: blur(6px) saturate(120%);
+        transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+        box-shadow: 0 4px 12px rgba(2,6,23,0.06);
+      }
+      .meet-card:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(2,6,23,0.18); }
+      .meet-card h3 { font-size: 1.125rem; font-weight: 800; color: #0f172a; margin-bottom: 0.25rem; }
+      .meet-card p { font-size: 1rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem; }
+      /* stronger social icon contrast */
+      .meet-card a { opacity: 0.98; }
     </style>
   </head>
   <!-- Light greenish background for the body -->
@@ -272,7 +332,7 @@
         <!-- Title and Team Info Center -->
         <div class="text-center mx-4 flex-grow">
           <h1
-            class="font-orbitron text-10xl sm:text-3xl font-extrabold text-gray-900 mb-2 leading-tight"
+            class="font-orbitron text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-2 leading-tight"
           >
             Real-Time Attack Prevention<br />On E-Commerce Websites Using AI
           </h1>
@@ -553,7 +613,7 @@
               <h4
                 class="text-xl font-bold mb-3 mt-6 text-gray-800 border-b pb-2"
               >
-                Anomaly Case Workflows (Vertical)
+                Anomaly Case Workflows
               </h4>
 
               <!-- Workflow Steps Container (2 Vertical Diagrams) -->
@@ -802,22 +862,117 @@
             
         </div>
 
-        <!-- Main Console Output -->
-        <div id="scanner" class="h-64 md:h-96 p-4 border-2 rounded-lg neon-border transition duration-500">
-            <h2 class="text-xl font-bold mb-2 neon-text">SYSTEM CONSOLE // TRAFFIC LOG</h2>
-            <div id="log-output" class="text-sm overflow-y-auto h-[calc(100%-3rem)] transition-colors">
+    <!-- Main Console Output -->
+    <div id="scanner" class="h-64 md:h-96 p-4 border-2 rounded-lg neon-border transition duration-500 bg-black console-mono">
+      <h2 class="text-xl font-bold mb-2 neon-text">SYSTEM CONSOLE // TRAFFIC LOG</h2>
+      <div id="log-output" class="text-sm overflow-y-auto h-[calc(100%-3rem)] transition-colors console-mono">
                 <p class="text-gray-500">// Waiting for user input. Click a button to simulate an attack vector...</p>
             </div>
         </div>
         
         <!-- NEW LOCATION: Meet the Team Button (Below Console) -->
-        <!-- <div class="flex justify-center mt-6">
-            <a href="meet.html" 
-               class="w-full md:w-1/2 flex items-center justify-center bg-gray-800 text-white font-bold py-4 px-6 rounded-lg border-2 border-indigo-500 blue-neon-border hover:bg-indigo-800 transition duration-300 shadow-lg text-lg tracking-wider"
-               >
+        <div class="flex justify-center mt-6">
+            <button id="meetTeamBtn" 
+                    class="w-full md:w-1/2 flex items-center justify-center bg-gray-800 text-white font-bold py-4 px-6 rounded-lg border-2 border-indigo-500 blue-neon-border hover:bg-indigo-800 transition duration-300 shadow-lg text-lg tracking-wider"
+                    aria-expanded="false"
+                    aria-controls="meet-team">
                 MEET THE TEAM
-            </a>
-        </div> -->
+            </button>
+        </div>
+
+        <!-- Hidden Meet The Team Section (same page) with animation wrapper -->
+        <section id="meet-team" class="hidden mt-12 p-4 sm:p-6 bg-white rounded-lg shadow-lg max-w-6xl mx-auto w-full" aria-hidden="true">
+          <div class="meet-panel p-4">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-2xl font-bold">Meet the Team</h2>
+              <button id="meetCloseBtn" class="text-sm text-gray-500 hover:text-gray-800">Close ✕</button>
+            </div>
+            <p class="text-sm text-gray-600 mb-6">Our team of four: brief intros and links to social profiles. Images are placeholders.</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <!-- Member 1 -->
+            <div class="meet-card bg-gray-50 rounded-lg p-4 text-center shadow break-words">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center mb-3 overflow-hidden">
+                <img src="https://scontent.fjsr6-1.fna.fbcdn.net/v/t39.30808-6/461697805_1732841830813513_5256851191135795887_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeFVqHm2DHpdHUIaXHJb9v0r86Gu9_YVfhTzoa739hV-FOghFsZhrMaGus1TnK4cKWLCBn4UyFbtC8fn5Tg4otxU&_nc_ohc=8XTsTwN5wB0Q7kNvwF6eNFj&_nc_oc=AdnLmZDa7VAKMyPG069315K4FbkB0F4SZKRssnkoN5hBuFXm5V9E9mOyjy3ebFBhPW4&_nc_zt=23&_nc_ht=scontent.fjsr6-1.fna&_nc_gid=xsmyXcoZLjDa_qRwRfnDxA&oh=00_AfigP19f3aNj386DDomzR-qC6K7Vf3Mv1hMizsscSXXl9g&oe=6916A0FA" alt="Nirjhar Saha" class="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <h3 class="font-semibold">Nirjhar Saha</h3>
+              <p class="text-sm text-gray-600 mb-3">Frontend & ML integration. Loves prototyping UI.</p>
+              <div class="flex items-center justify-center gap-3">
+                <a href="#" class="text-gray-600 hover:text-gray-900" aria-label="Nirjhar GitHub">
+                  <!-- GitHub -->
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.74 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 012.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.77.11 3.06.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.02.77 2.06 0 1.49-.01 2.69-.01 3.06 0 .3.2.65.79.54C20.71 21.39 24 17.08 24 12c0-6.27-5.23-11.5-12-11.5z"/></svg>
+                </a>
+                <a href="#" class="text-blue-600 hover:text-blue-800" aria-label="Nirjhar LinkedIn">
+                  <!-- LinkedIn -->
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48s.88 1.98 1.98 1.98 1.98-.88 1.98-1.98S6.08 3.5 4.98 3.5zM3.5 8.98h3v12.52h-3V8.98zM9.5 8.98h2.85v1.71h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.6v7.77h-3V14.5c0-1.54-.03-3.51-2.14-3.51-2.14 0-2.47 1.66-2.47 3.39v6.09h-3V8.98z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/nirjhar.s5" class="text-blue-800 hover:text-blue-900" aria-label="Nirjhar Facebook">
+                  <!-- Facebook -->
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07C2 17.09 5.66 21.17 10.44 21.95v-7.01H7.9v-3.87h2.54V9.1c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.45h-1.25c-1.23 0-1.61.77-1.61 1.56v1.87h2.74l-.44 3.87h-2.3v7.01C18.34 21.17 22 17.09 22 12.07z"/></svg>
+                </a>
+                <a href="#" class="text-purple-600 hover:text-purple-800" aria-label="Nirjhar TryHackMe">
+                  <!-- Generic shield / TryHackMe placeholder -->
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zM12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Member 2 -->
+            <div class="meet-card bg-gray-50 rounded-lg p-4 text-center shadow">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center mb-3 overflow-hidden">
+                <img src="https://scontent.fjsr6-1.fna.fbcdn.net/v/t39.30808-6/476208637_1177992563934729_2789437988581582585_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGOuRnPWM6JVGzegYxh3RoCGQnP65dfUhkZCc_rl19SGf7FGtqTEihcp00nTxviwk7rBjtczkuL7LXJ3VVTrlp-&_nc_ohc=t2bItqeEOMkQ7kNvwFyxQjV&_nc_oc=AdmLI1-Njas_CuIDw1pHRM9pvy8M0S5-dXwNfxU3Atgsq2z39Fv9gclFf3-CLpYpNEQ&_nc_zt=23&_nc_ht=scontent.fjsr6-1.fna&_nc_gid=plUzGaWSiFsg0qi2FO3nnA&oh=00_AfhseT-Wy-mlUZqhhp5qKX6HMbzKfIYvxLH9qQjwj3BS8A&oe=69169E82" alt="Dipu Basak" class="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <h3 class="font-semibold">Dipu Basak</h3>
+              <p class="text-sm text-gray-600 mb-3">Backend & systems. Loves playing with the logic. An independent Cybersecurity researcher.</p>
+              <div class="flex items-center justify-center gap-3">
+                <a href="https://github.com/dipu-basak" class="text-gray-600 hover:text-gray-900" aria-label="Dipu GitHub"> <!-- GitHub -->
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.74 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 012.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.77.11 3.06.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.02.77 2.06 0 1.49-.01 2.69-.01 3.06 0 .3.2.65.79.54C20.71 21.39 24 17.08 24 12c0-6.27-5.23-11.5-12-11.5z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/0xbasak/" class="text-blue-600 hover:text-blue-800" aria-label="Dipu LinkedIn"> <!-- LinkedIn -->
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48s.88 1.98 1.98 1.98 1.98-.88 1.98-1.98S6.08 3.5 4.98 3.5zM3.5 8.98h3v12.52h-3V8.98zM9.5 8.98h2.85v1.71h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.6v7.77h-3V14.5c0-1.54-.03-3.51-2.14-3.51-2.14 0-2.47 1.66-2.47 3.39v6.09h-3V8.98z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/0xbasak" class="text-blue-800 hover:text-blue-900" aria-label="Dipu Facebook"> <!-- Facebook -->
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07C2 17.09 5.66 21.17 10.44 21.95v-7.01H7.9v-3.87h2.54V9.1c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.45h-1.25c-1.23 0-1.61.77-1.61 1.56v1.87h2.74l-.44 3.87h-2.3v7.01C18.34 21.17 22 17.09 22 12.07z"/></svg>
+                </a>
+                <a href="https://0xbasak.medium.com" class="text-purple-600 hover:text-purple-800" aria-label="Dipu TryHackMe"> <!-- TryHackMe -->
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zM12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Member 3 -->
+            <div class="meet-card bg-gray-50 rounded-lg p-4 text-center shadow">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center mb-3 overflow-hidden">
+                <img src="https://media.licdn.com/dms/image/v2/D5603AQHS5OqO4Cz3Cw/profile-displayphoto-crop_800_800/B56Zpp4rKXI4AI-/0/1762713058385?e=1764201600&v=beta&t=lkfybY5V5oVciT3h4_utzflXptS1UOS7StzH2Z5JlUo" alt="Rahima Afrin Erin" class="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <h3 class="font-semibold">Rahima Afrin Erin</h3>
+              <p class="text-sm text-gray-600 mb-3">Data and evaluation. Works on labeling and model metrics.</p>
+              <div class="flex items-center justify-center gap-3">
+                <a href="#" class="text-gray-600 hover:text-gray-900" aria-label="Rahima GitHub"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.74 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 012.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.77.11 3.06.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.02.77 2.06 0 1.49-.01 2.69-.01 3.06 0 .3.2.65.79.54C20.71 21.39 24 17.08 24 12c0-6.27-5.23-11.5-12-11.5z"/></svg></a>
+                <a href="https://www.linkedin.com/in/afrin-erin-7a97a4391/" class="text-blue-600 hover:text-blue-800" aria-label="Rahima LinkedIn"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48s.88 1.98 1.98 1.98 1.98-.88 1.98-1.98S6.08 3.5 4.98 3.5zM3.5 8.98h3v12.52h-3V8.98zM9.5 8.98h2.85v1.71h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.6v7.77h-3V14.5c0-1.54-.03-3.51-2.14-3.51-2.14 0-2.47 1.66-2.47 3.39v6.09h-3V8.98z"/></svg></a>
+                <a href="#" class="text-blue-800 hover:text-blue-900" aria-label="Rahima Facebook"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07C2 17.09 5.66 21.17 10.44 21.95v-7.01H7.9v-3.87h2.54V9.1c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.45h-1.25c-1.23 0-1.61.77-1.61 1.56v1.87h2.74l-.44 3.87h-2.3v7.01C18.34 21.17 22 17.09 22 12.07z"/></svg></a>
+                <a href="#" class="text-purple-600 hover:text-purple-800" aria-label="Rahima TryHackMe"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zM12 8a4 4 0 100 8 4 4 0 000-8z"/></svg></a>
+              </div>
+            </div>
+
+            <!-- Member 4 -->
+            <div class="meet-card bg-gray-50 rounded-lg p-4 text-center shadow">
+              <div class="w-24 h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center mb-3">
+                <svg class="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z"/></svg>
+              </div>
+              <h3 class="font-semibold">Roshni Rownak Ifti</h3>
+              <p class="text-sm text-gray-600 mb-3">UX & testing. Ensures reliable demo flows and usability.</p>
+              <div class="flex items-center justify-center gap-3">
+                <a href="#" class="text-gray-600 hover:text-gray-900" aria-label="Roshni GitHub"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.74 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.06 11.06 0 012.9-.39c.98 0 1.97.13 2.9.39 2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.77.11 3.06.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.02.77 2.06 0 1.49-.01 2.69-.01 3.06 0 .3.2.65.79.54C20.71 21.39 24 17.08 24 12c0-6.27-5.23-11.5-12-11.5z"/></svg></a>
+                <a href="#" class="text-blue-600 hover:text-blue-800" aria-label="Roshni LinkedIn"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48s.88 1.98 1.98 1.98 1.98-.88 1.98-1.98S6.08 3.5 4.98 3.5zM3.5 8.98h3v12.52h-3V8.98zM9.5 8.98h2.85v1.71h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.6v7.77h-3V14.5c0-1.54-.03-3.51-2.14-3.51-2.14 0-2.47 1.66-2.47 3.39v6.09h-3V8.98z"/></svg></a>
+                <a href="#" class="text-blue-800 hover:text-blue-900" aria-label="Roshni Facebook"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07C2 17.09 5.66 21.17 10.44 21.95v-7.01H7.9v-3.87h2.54V9.1c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.45h-1.25c-1.23 0-1.61.77-1.61 1.56v1.87h2.74l-.44 3.87h-2.3v7.01C18.34 21.17 22 17.09 22 12.07z"/></svg></a>
+                <a href="#" class="text-purple-600 hover:text-purple-800" aria-label="Roshni TryHackMe"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zM12 8a4 4 0 100 8 4 4 0 000-8z"/></svg></a>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </section>
     </div>
 
     <!-- Alert Modal (Hidden by default) -->
@@ -1011,6 +1166,82 @@
      logMessage('// WAITING FOR REQUEST SIMULATION...', 480); 
      });
       // ending here
+
+    // Enhanced Meet the Team behavior with focus trap, Escape to close and outside click
+    (function() {
+      const meetBtn = document.getElementById('meetTeamBtn');
+      const meetSection = document.getElementById('meet-team');
+      const meetPanel = meetSection ? meetSection.querySelector('.meet-panel') : null;
+      const meetClose = document.getElementById('meetCloseBtn');
+      if (!meetBtn || !meetSection || !meetPanel) return;
+
+      let lastFocused = null;
+
+      function trapFocus(container) {
+        const focusable = container.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
+        if (!focusable.length) return () => {};
+        let first = focusable[0];
+        let last = focusable[focusable.length - 1];
+
+        function handleKey(e) {
+          if (e.key === 'Tab') {
+            if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault(); last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault(); first.focus();
+            }
+          }
+        }
+        document.addEventListener('keydown', handleKey);
+        return () => document.removeEventListener('keydown', handleKey);
+      }
+
+      function openMeetSection() {
+        lastFocused = document.activeElement;
+        meetSection.classList.remove('hidden');
+        meetSection.classList.add('open');
+        meetSection.setAttribute('aria-hidden', 'false');
+        meetBtn.setAttribute('aria-expanded', 'true');
+        // small timeout to allow CSS transition
+        setTimeout(() => {
+          meetPanel.querySelector('button, a, [tabindex]')?.focus();
+        }, 260);
+        // trap focus while open
+        removeTrap = trapFocus(meetSection);
+        // Listen for Escape
+        document.addEventListener('keydown', handleEscape);
+        // outside click
+        document.addEventListener('click', handleOutsideClick);
+      }
+
+      function closeMeetSection() {
+        meetSection.classList.add('hidden');
+        meetSection.classList.remove('open');
+        meetSection.setAttribute('aria-hidden', 'true');
+        meetBtn.setAttribute('aria-expanded', 'false');
+        if (lastFocused) lastFocused.focus();
+        if (removeTrap) removeTrap();
+        document.removeEventListener('keydown', handleEscape);
+        document.removeEventListener('click', handleOutsideClick);
+      }
+
+      function handleEscape(e) {
+        if (e.key === 'Escape') closeMeetSection();
+      }
+
+      function handleOutsideClick(e) {
+        if (!meetSection.contains(e.target) && e.target !== meetBtn) closeMeetSection();
+      }
+
+      let removeTrap = null;
+
+      meetBtn.addEventListener('click', () => {
+        if (meetSection.classList.contains('hidden')) openMeetSection();
+        else closeMeetSection();
+      });
+
+      meetClose.addEventListener('click', closeMeetSection);
+    })();
 
 
 
