@@ -618,35 +618,31 @@
 
               <!-- Workflow Steps Container (2 Vertical Diagrams) -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- 1. Volumetric Fraud Detection (Race Condition) - VERTICAL FLOW -->
+                <!-- 1. Business Logic Error (Price Manipulation) - VERTICAL FLOW -->
                 <div class="workflow-box">
                   <p
                     class="font-extrabold text-base text-gray-800 border-b pb-1 mb-1 text-center"
                   >
-                    <b>Case A: Volumetric Fraud (Race Condition)</b>
+                    <b>Case A: Business Logic Error (Price Manipulation)</b>
                   </p>
                   <div
                     class="flow-chart flex flex-col items-center justify-center w-full text-sm space-y-2"
                   >
                     <div class="flow-step step-start w-3/4">
-                      Request (50x/1s)
+                      Request (Modify price in payload)
                     </div>
-                    <span class="text-3xl text-green-600 font-extrabold"
-                      >&#x2193;</span
-                    >
+                    <span class="text-3xl text-green-600 font-extrabold">&#x2193;</span>
                     <div class="flow-step step-detect w-3/4">
-                      Detects Volumetric Anomaly
+                      Detects Price/Logic Mismatch (Client vs. Server)
                     </div>
-                    <span class="text-3xl text-green-600 font-extrabold"
-                      >&#x2193;</span
-                    >
+                    <span class="text-3xl text-green-600 font-extrabold">&#x2193;</span>
                     <div class="flow-step step-block w-3/4">
-                      Decision: Block & Alert
+                      Decision: Sanitize & Block Transaction
                     </div>
                   </div>
                   <p class="text-xs italic text-gray-600 mt-1 text-center">
-                    Example: 50 requests in 1 second for a coupon code are
-                    instantly blocked.
+                    Example: A user changes the product price from $100 to $1 in
+                    the request payload; the transaction is instantly blocked.
                   </p>
                 </div>
 
